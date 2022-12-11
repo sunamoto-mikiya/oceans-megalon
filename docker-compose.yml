@@ -28,3 +28,28 @@ services:
     volumes:
       - ./:/var/www/html
       - ./docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+
+  minio:
+    build: ./docker/minio
+    volumes:
+      - ./docker/minio/data:/export
+      - ./docker/minio/config:/root/.minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=password
+  createbuckets:
+    container_name: oceans-createbuckets
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until (/usr/bin/mc config host add myminio http://minio:9000 root password) do echo '...waiting...' && sleep 1; done;
+      /usr/bin/mc mb myminio/default;
+      /usr/bin/mc policy download myminio/default;
+      /usr/bin/mc policy set public myminio/default;
+      exit 0;
+      "
