@@ -59,6 +59,11 @@ npm run dev
 npm run build
 ```
 
+### MinIO
+http://localhost:9000 にアクセスして確認できる．
+ユーザ名とパスワードは以下．
 
+- ユーザ名：`root`
+- パスワード：`password`
 
 
