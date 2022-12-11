@@ -1,11 +1,15 @@
 FROM php:8.1.9-apache
 
-RUN apt update && apt install -y zlib1g-dev g++ libicu-dev zip libzip-dev zip libpq-dev \
+RUN apt update && apt install -y zlib1g-dev g++ zip \
+    libzip-dev libicu-dev libpq-dev \
+    libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    libjpeg-dev libgd-dev \
     && docker-php-ext-install intl opcache pdo pdo_mysql \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-configure zip \
-    && docker-php-ext-install zip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install zip gd \
     && apt-get install -y git \
     && a2enmod rewrite
 
