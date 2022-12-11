@@ -36,6 +36,12 @@ php artisan key:generate
 ### マイグレーション
 ```
 php artisan migrate
+php artisan migrate --env=testing # テスト用DB
+```
+
+### シード
+```
+php artisan db:seed
 ```
 
 ## Viteセットアップ
