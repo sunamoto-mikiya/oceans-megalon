@@ -6,12 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Comment;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'author_id', 'project_id', 'title','type','status','description','start_date','end_date'];
+    protected $fillable = [
+        'user_id',
+        'author_id',
+        'project_id',
+        'title',
+        'type',
+        'status',
+        'description',
+        'start_date',
+        'end_date',
+    ];
 
     # Const
     # Status
@@ -38,11 +52,74 @@ class Task extends Model
         self::OTHER => 'その他',
     ];
 
-    public function comments(){
+    /**
+     * コメント
+     *
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
         return $this->hasMany(Comment::class);
     }
 
-    public function files(){
+    /**
+     * 添付ファイル
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
         return $this->hasMany(File::class);
+    }
+
+    /**
+     * タスク担当者
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * プロジェクト
+     *
+     * @return BelongsTo
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * S3にファイル保存
+     *
+     * @param  int $projectId
+     * @param  int $taskId
+     * @param  UploadedFile|null $file
+     * @return string
+     */
+    public function putFileS3(int $projectId, int $taskId, UploadedFile|null $file): string
+    {
+        if (is_null($file)) {
+            File::where('task_id', $taskId)->first()->delete();
+            return '';
+        }
+
+        // S3にファイル保存
+        $path = "/images/projects/{$projectId}/tasks/{$taskId}.png";
+        Storage::disk('s3')->put($path, $file);
+        
+        // 既に保存済みならば，ファイルパスに変更はないので特に処理なし
+        $file = File::where('task_id')->first();
+        if (is_null($file)) {
+            File::create([
+                'task_id' => $taskId,
+                'url' => $path,
+            ]);
+        }
+
+        return $path;
     }
 }
