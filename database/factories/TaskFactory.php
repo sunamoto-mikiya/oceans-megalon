@@ -25,8 +25,8 @@ class TaskFactory extends Factory
             'type' => 1,
             'status' => 1,
             'description' => $this->faker->sentence(),
-            'start_date' => CarbonImmutable::now(),
-            'end_date' => CarbonImmutable::now()->addDays(3),
+            'start_date' => CarbonImmutable::now()->toDateString(),
+            'end_date' => CarbonImmutable::now()->addDays(3)->toDateString(),
         ];
     }
 }
