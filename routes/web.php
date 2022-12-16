@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('edit');
         Route::post('/tasks/{taskId}', [TaskController::class, 'update'])->name('update');
         Route::delete('/tasks/{taskId}', [TaskController::class, 'delete'])->name('delete');
+    });
+
+    //Board
+    Route::prefix('projects/{projectId}/board/')->name('board.')->group(function(){
+        Route::get('/',[BoardController::class,'index'])->name('index');
+        Route::post('/{taskId}',[BoardController::class,'update'])->name('update');
     });
 });
 
