@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - production
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  test-suite:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0.30
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, intl
+        coverage: none
+    - name: Composer install
+      run: |
+        composer install --ignore-platform-reqs
+    - name: Copy env
+      run: cp .env.testing .env
+    - name: Encryption Key generate
+      run: php artisan key:generate
+    - name: Run Migrate
+      run: php artisan migrate
+    - name: Run PHPUnit
+      run: ./vendor/bin/phpunit
