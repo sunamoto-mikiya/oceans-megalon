@@ -16,7 +16,7 @@ class BoardController extends Controller
      */
     public function index(int $projectId): View
     {
-        $tasks = Task::with(['users', 'comments', 'files'])->where('project_id', $projectId)->get();
+        $tasks = Task::with(['user', 'comments', 'files'])->where('project_id', $projectId)->get();
         return view('board.index', compact('tasks'));
     }
 
