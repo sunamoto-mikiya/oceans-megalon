@@ -39,6 +39,8 @@ jobs:
       env:
         DB_HOST: 127.0.0.1
       run: php artisan migrate
+    - name: Setup Vite
+      run: npm install && npm run build
     - name: Run PHPUnit
       env:
         DB_HOST: 127.0.0.1
