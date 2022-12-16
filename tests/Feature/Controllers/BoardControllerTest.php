@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Services\BoardService;
+use Mockery;
 
 class BoardControllerTest extends TestCase
 {
@@ -41,7 +42,7 @@ class BoardControllerTest extends TestCase
     public function 全タスク取得()
     {
         // 未認証ユーザー
-        $response = $this->get(route('board.index'));
+        $response = $this->get(route('board.index', ['projectId' => $this->project->id]));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
 
@@ -56,7 +57,7 @@ class BoardControllerTest extends TestCase
     public function ステータス更新とボードのタスク一覧へ遷移()
     {
         // 未認証ユーザー
-        $response = $this->get(route('board.update', [
+        $response = $this->post(route('board.update', [
             'taskId' => $this->task->id,
             'status' => Task::PROCESSING,
             'projectId' => $this->project->id,
@@ -69,14 +70,14 @@ class BoardControllerTest extends TestCase
             ->shouldReceive('taskStatusUpdate')
             ->once()
             ->with($this->task->id, Task::PROCESSING);
-        $this->instance(BoardService::class, $this->boardMock);
+        $this->instance(BoardService::class, $this->boardService);
 
         //認証ユーザー
         $response = $this->actingAs($this->user)->post(route('board.update', [
             'taskId' => $this->task->id,
+            'status' => Task::PROCESSING,
             'projectId' => $this->project->id
         ]));
         $response->assertRedirect(route('board.index', ['projectId' => $this->project->id]));
-        $response->assertStatus(200);
     }
 }
