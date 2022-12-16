@@ -1,0 +1,47 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - production
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  test-suite:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0.30
+        env:
+          MYSQL_DATABASE: test
+          MYSQL_USER: oceans
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, intl
+        coverage: none
+    - name: Composer install
+      run: |
+        composer install --ignore-platform-reqs
+    - name: Copy env
+      run: cp .env.testing .env
+    - name: Encryption Key generate
+      run: php artisan key:generate
+    - name: Run Migrate
+      env:
+        DB_HOST: 127.0.0.1
+      run: php artisan migrate
+    - name: Setup Vite
+      run: npm install && npm run build
+    - name: Run PHPUnit
+      env:
+        DB_HOST: 127.0.0.1
+      run: ./vendor/bin/phpunit
