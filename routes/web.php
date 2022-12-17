@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('projects/{projectId}')->name('task.')->group(function () {
         Route::get('/index', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
-        Route::post('/', [TaskController::class, 'store'])->name('store');
+        Route::post('/create', [TaskController::class, 'store'])->name('store');
         Route::get('/tasks/{taskId}', [TaskController::class, 'show'])->name('show');
         Route::get('/tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('edit');
         Route::post('/tasks/{taskId}', [TaskController::class, 'update'])->name('update');
@@ -48,8 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/create', [ProjectController::class, 'create'])->name('create');
         Route::post('/', [ProjectController::class, 'store'])->name('store');
-        Route::get('/{projectId}', [ProjectController::class, 'show'])->name('show');
-        Route::get('/projectId}/edit', [ProjectController::class, 'edit'])->name('edit');
+        Route::get('/{projectId}/edit', [ProjectController::class, 'edit'])->name('edit');
         Route::post('/{projectId}', [ProjectController::class, 'update'])->name('update');
         Route::delete('/{projectId}', [ProjectController::class, 'delete'])->name('delete');
     });

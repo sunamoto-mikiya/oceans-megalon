@@ -65,21 +65,21 @@ class TaskServiceTest extends TestCase
         ]);
 
         // statusとuser_idのどちらも指定しない
-        $tasks = $this->taskService->getTasks(null, null);
+        $tasks = $this->taskService->getTasks(null, null, $this->project->id);
         foreach ([$this->task->id, $task2->id] as $taskId) {
             $this->assertContains($taskId, $tasks->pluck('id')->all());
         }
 
         // statusのみ指定
-        $tasks = $this->taskService->getTasks(Task::COMPLETED, null);
+        $tasks = $this->taskService->getTasks(Task::COMPLETED, null, $this->project->id);
         $this->assertContains($task2->id, $tasks->pluck('id')->all());
 
         // user_idのみ指定
-        $tasks = $this->taskService->getTasks(null, $user2->id);
+        $tasks = $this->taskService->getTasks(null, $user2->id, $this->project->id);
         $this->assertContains($task2->id, $tasks->pluck('id')->all());
 
         // statusとuser_idの両方指定
-        $tasks = $this->taskService->getTasks(Task::UNSUPPORTED, $this->user->id);
+        $tasks = $this->taskService->getTasks(Task::UNSUPPORTED, $this->user->id, $this->project->id);
         $this->assertContains($this->task->id, $tasks->pluck('id')->all());
     }
 
