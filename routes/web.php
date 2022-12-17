@@ -3,6 +3,7 @@
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,6 +41,17 @@ Route::middleware('auth')->group(function () {
         Route::get('/tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('edit');
         Route::post('/tasks/{taskId}', [TaskController::class, 'update'])->name('update');
         Route::delete('/tasks/{taskId}', [TaskController::class, 'delete'])->name('delete');
+    });
+
+    // Project
+    Route::prefix('projects')->name('project.')->group(function () {
+        Route::get('/', [ProjectController::class, 'index'])->name('index');
+        Route::get('/create', [ProjectController::class, 'create'])->name('create');
+        Route::post('/', [ProjectController::class, 'store'])->name('store');
+        Route::get('/{projectId}', [ProjectController::class, 'show'])->name('show');
+        Route::get('/projectId}/edit', [ProjectController::class, 'edit'])->name('edit');
+        Route::post('/{projectId}', [ProjectController::class, 'update'])->name('update');
+        Route::delete('/{projectId}', [ProjectController::class, 'delete'])->name('delete');
     });
 
     //Board
