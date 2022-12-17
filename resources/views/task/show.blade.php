@@ -10,6 +10,9 @@
     <p>{{ $statusOptions[$task->status] }}</p>
     <p>{{ $task->start_date }}</p>
     <p>{{ $task->end_date }}</p>
+    @if ($task->files->isNotEmpty())
+    <img src="{{ $task->files[0]->url }}" />
+    @endif
 </div>
 @stop @section('css')
 <link rel="stylesheet" href="/css/admin_custom.css" />

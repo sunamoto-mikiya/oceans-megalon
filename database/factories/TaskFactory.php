@@ -24,7 +24,7 @@ class TaskFactory extends Factory
             'title' => $this->faker->title(),
             'type' => 1,
             'status' => 1,
-            'description' => $this->faker->sentence(),
+            'description' => $this->faker->realText(300),
             'start_date' => CarbonImmutable::now()->toDateString(),
             'end_date' => CarbonImmutable::now()->addDays(3)->toDateString(),
         ];

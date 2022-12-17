@@ -1,0 +1,97 @@
+name: Deploy to Amazon ECS production environment
+
+on:
+  push:
+    branches:
+      - production
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: oceans-ecr-repository
+  ECS_SERVICE: ecs-fargate-service
+  ECS_CLUSTER: oceans-ecs-fargate-cluster
+  ECS_SERVICE_DEFINITION_JSON: ecs-service-def.json
+  ECS_TASK_DEFINITION_JSON: ecs-task-def.json
+  CONTAINER_NAME: oceans-app-container
+  ECSPRESSO_CONFIG: docker/deploy/production/ecspresso.yml
+  ECSHEDULE_CONFIG: docker/deploy/production/ecschedule.yml
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ECS_DEPLOY_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.ECS_DEPLOY_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - uses: docker/build-push-action@v3
+        id: build-image
+        with:
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          file: docker/deploy/production/Dockerfile
+
+      - name: Move cache and tag
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Download ecspresso
+        uses: kayac/ecspresso@v2
+        with:
+          version: v2.0.0
+
+      - name: Register task definition
+        id: task-def
+        env:
+          IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        run: |
+          ecspresso register --config $ECSPRESSO_CONFIG
+
+      - name: Migrate database
+        env:
+          IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        run: |
+          ecspresso run --config $ECSPRESSO_CONFIG \
+            --latest-task-definition \
+            --watch-container=$CONTAINER_NAME \
+            --overrides='{"containerOverrides":[{"name":"'$CONTAINER_NAME'", "command":["php", "artisan", "migrate", "--force"]}]}'
+
+      - name: Deploy to ECS
+        env:
+          IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+        run: ecspresso deploy --config $ECSPRESSO_CONFIG --latest-task-definition
+
+      - name: Download ecshedule
+        uses: Songmu/ecschedule@main
+        with:
+          version: v0.7.1
+
+      - name: Apply to ECS scheduled task
+        run: ecschedule -conf $ECSHEDULE_CONFIG apply -all

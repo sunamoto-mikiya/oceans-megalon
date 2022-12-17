@@ -1,0 +1,11 @@
+region: '{{ must_env `AWS_REGION` }}'
+cluster: '{{ must_env `ECS_CLUSTER` }}'
+role: oceans-ecs-scheduled-task-role
+rules:
+  - name: oceans-megalo-send-reminder-email
+    description: Send Reminder Email
+    scheduleExpression: cron(*/10 * ? * * *)
+    taskDefinition: oceans-ecs-task
+    containerOverrides:
+      - name: '{{ must_env `CONTAINER_NAME` }}'
+        command: ['php', 'artisan', 'email:remind']
