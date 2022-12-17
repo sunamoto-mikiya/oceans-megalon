@@ -8,6 +8,7 @@ use App\Services\ProjectService;
 use Illuminate\View\View;
 use App\Models\Project;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
 
 class ProjectController extends Controller
 {
@@ -27,9 +28,11 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
-        //
+        $users = User::query()->get();
+        $author_id = Auth::user()->id;
+        return view('project.create', compact('users', 'author_id'));
     }
 
     /**
@@ -38,9 +41,10 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, ProjectService $projectService)
     {
-        //
+        $project = $projectService->storeProject($request);
+        return Redirect::route('project.index');
     }
 
     /**

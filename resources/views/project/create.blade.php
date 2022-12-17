@@ -6,15 +6,16 @@
             <h3 class="card-title">プロジェクト作成</h3>
         </div>
 
-        <form>
+        <form method="post" action="{{ route('project.store',[$author_id]) }}" enctype="multipart/form-data">
+            @csrf
             <div class="card-body">
                 <div class="form-group">
                     <label for="exampleInputEmail1">タイトル</label>
                     <input
-                        type="email"
+                        name="title"
                         class="form-control"
-                        id="exampleInputEmail1"
-                        placeholder="Enter email"
+                        id="title"
+                        placeholder="タイトル"
                         control-id="ControlID-1"
                     />
                 </div>
@@ -22,8 +23,10 @@
                     <label for="exampleInputPassword1">詳細</label>
                     <textarea
                         class="form-control"
+                        name="description"
+                        id="description"
                         rows="3"
-                        placeholder="Enter ..."
+                        placeholder="プロジェクト詳細"
                         control-id="ControlID-13"
                         data-dl-input-translation="true"
                     ></textarea>
@@ -34,6 +37,7 @@
                         <div class="custom-file">
                             <input
                                 type="file"
+                                name="file"
                                 class="custom-file-input"
                                 id="exampleInputFile"
                                 control-id="ControlID-3"
@@ -41,13 +45,25 @@
                             <label
                                 class="custom-file-label"
                                 for="exampleInputFile"
-                                >Choose file</label
+                                >ファイル選択してください</label
                             >
                         </div>
                         <div class="input-group-append">
                             <span class="input-group-text">Upload</span>
                         </div>
                     </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <select
+                        name="users[]"
+                        class="custom-select"
+                        id="user"
+                        multiple=>'multiple'
+                    >
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -57,7 +73,7 @@
                     class="btn btn-primary"
                     control-id="ControlID-5"
                 >
-                    Submit
+                    作成
                 </button>
             </div>
         </form>
