@@ -18,7 +18,7 @@ class ProjectFactory extends Factory
     {
         return [
             'title' => $this->faker->title(),
-            'description' => $this->faker->sentence(),
+            'description' => $this->faker->realText(300),
         ];
     }
 }

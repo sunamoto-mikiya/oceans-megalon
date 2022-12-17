@@ -19,7 +19,7 @@ class CommentFactory extends Factory
         return [
             'user_id' => 1,
             'task_id' => 1,
-            'contents' => $this->faker->sentence(),
+            'contents' => $this->faker->realText(30),
         ];
     }
 }
