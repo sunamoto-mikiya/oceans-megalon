@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -43,7 +45,33 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function projects(){
+    /**
+     * プロジェクト
+     *
+     * @return BelongsToMany
+     */
+    public function projects(): BelongsToMany
+    {
         return $this->belongsToMany(Project::class);
+    }
+
+    /**
+     * タスク
+     *
+     * @return HasMany
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    /**
+     * コメント
+     *
+     * @return BelongsToMany
+     */
+    public function comments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class);
     }
 }

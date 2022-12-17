@@ -1,0 +1,6 @@
+region: '{{ must_env `AWS_REGION` }}'
+cluster: '{{ must_env `ECS_CLUSTER` }}'
+service: '{{ must_env `ECS_SERVICE` }}'
+service_definition: '{{ must_env `ECS_SERVICE_DEFINITION_JSON` }}'
+task_definition: '{{ must_env `ECS_TASK_DEFINITION_JSON` }}'
+timeout: 10m0s
