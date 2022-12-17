@@ -63,9 +63,9 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       - name: Download ecspresso
-        uses: kayac/ecspresso@v2
+        uses: kayac/ecspresso@v1
         with:
-          version: v2.0.0
+          version: v1.7.15
 
       - name: Register task definition
         id: task-def
