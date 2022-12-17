@@ -20,9 +20,9 @@ class TaskService
      * @param  array $params
      * @return Collection
      */
-    public function getTasks(int $status = null, int $userId = null): Collection
+    public function getTasks(int $status = null, int $userId = null, $projectId): Collection
     {
-        $query = Task::query();
+        $query = Task::query()->where('project_id', $projectId);
 
         // Statusで絞込
         if (!is_null($status)) {
@@ -82,7 +82,6 @@ class TaskService
      * 編集画面用タスク取得
      *
      * @param  int $projectId
-     * @param  int $taskId
      * @return Task
      */
     public function getTaskForEdit(int $taskId): Task

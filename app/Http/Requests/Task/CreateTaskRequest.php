@@ -31,7 +31,7 @@ class CreateTaskRequest extends FormRequest
             'description' => 'nullable',
             'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
-            'file'        => 'nullable|mimes:png,jpg,jpeg|max:10240',
+            'file'        => 'nullable|file|mimes:png,jpg,jpeg|max:10240',
         ];
     }
 }

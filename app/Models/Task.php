@@ -103,23 +103,27 @@ class Task extends Model
     public function putFileS3(int $projectId, int $taskId, UploadedFile|null $file): string
     {
         if (is_null($file)) {
-            File::where('task_id', $taskId)->first()->delete();
+            File::where('task_id', $taskId)->first()?->delete();
             return '';
         }
 
         // S3にファイル保存
-        $path = "/images/projects/{$projectId}/tasks/{$taskId}.png";
-        Storage::disk('s3')->put($path, $file);
+        $path = Storage::disk('s3')->put("/images/projects/{$projectId}/tasks/{$taskId}", $file);
         
-        // 既に保存済みならば，ファイルパスに変更はないので特に処理なし
-        $file = File::where('task_id')->first();
+        // 既に保存済みならば更新
+        $file = File::where('task_id', $taskId)->first();
+        $url = Storage::disk('s3')->url($path);
         if (is_null($file)) {
             File::create([
                 'task_id' => $taskId,
-                'url' => $path,
+                'url' => $url,
             ]);
+        } else {
+            $file->fill([
+                'url' => $url,
+            ])->saveOrFail();
         }
 
-        return $path;
+        return $url;
     }
 }
