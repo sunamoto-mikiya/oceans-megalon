@@ -19,7 +19,8 @@ class ProjectController extends Controller
      */
     public function index(ProjectService $projectService): View
     {
-        $projects = $projectService->getProjects();
+        $userId = Auth::id();
+        $projects = $projectService->getProjects($userId);
         return view('project.index', compact('projects'));
     }
 
@@ -43,7 +44,11 @@ class ProjectController extends Controller
      */
     public function store(Request $request, ProjectService $projectService)
     {
-        $project = $projectService->storeProject($request);
+        $project = $projectService->storeProject(
+            $request->input('title'),
+            $request->input('description'),
+            $request->input('users'),
+        );
         return Redirect::route('project.index');
     }
 

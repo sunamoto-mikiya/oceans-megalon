@@ -21,13 +21,12 @@ class ProjectService
     /**
      * ユーザーに紐づくプロジェクト一覧取得
      *
-     * @param  array $params
+     * @param  int $userId
      * @return Collection
      */
-    public function getProjects(): Collection
+    public function getProjects(int $userId): Collection
     {
-        $userInfo = Auth::user();
-        $user = User::findOrFail($userInfo->id);
+        $user = User::findOrFail($userId);
         $projects = $user->projects;
 
         return $projects;
@@ -36,14 +35,22 @@ class ProjectService
     /**
      * projectの作成
      *
-     * @param  array $params
+     * @param  string $title
+     * @param  string $description
+     * @param  array $userIds
+     * @return Project
      */
-    public function storeProject($request)
+    public function storeProject(string $title, string $description, array $userIds): Project
     {
         $project = new Project();
-        $project->fill(['title' => $request->title, 'description' => $request->description])->save();
+        $project->fill([
+            'title' => $title,
+            'description' => $description,
+        ])->save();
 
-        $project->users()->sync($request->users);
+        $project->users()->sync($userIds);
+
+        return $project;
     }
 
 
