@@ -7,6 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div>
+        <p>{{ $taskOptions[$task->type] }}</p>
+        <p>{{ $task->title }}</p>
+        <p>{{ $task->user?->name }}</p>
+        <p>{{ $task->description }}</p>
+        <p>{{ $statusOptions[$task->status] }}</p>
+        <p>{{ $task->start_date }}</p>
+        <p>{{ $task->end_date }}</p>
+    </div>
 </body>
 </html>
