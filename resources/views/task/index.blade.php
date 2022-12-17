@@ -7,6 +7,18 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div>
+        @foreach ($tasks as $task)
+            <div>
+                <p>{{ $taskOptions[$task->type] }}</p>
+                <a href="{{ route('task.show', [$projectId, $task->id]) }}">{{ $task->title }}</a>
+                <p>{{ $task->user->name }}</p>
+                <p>{{ $task->description }}</p>
+                <p>{{ $statusOptions[$task->status] }}</p>
+                <p>{{ $task->start_date }}</p>
+                <p>{{ $task->end_date }}</p>
+            </div>
+        @endforeach
+    </div>
 </body>
 </html>

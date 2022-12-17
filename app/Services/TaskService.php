@@ -82,7 +82,6 @@ class TaskService
      * 編集画面用タスク取得
      *
      * @param  int $projectId
-     * @param  int $taskId
      * @return Task
      */
     public function getTaskForEdit(int $taskId): Task

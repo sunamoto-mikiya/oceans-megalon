@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Models\Project;
+use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,11 +22,13 @@ class TaskController extends Controller
      * @param  int $projectId
      * @return View
      */
-    public function index(Request $request, TaskService $taskService, int $projectid): View
+    public function index(Request $request, TaskService $taskService, int $projectId): View
     {
         // クエリに基づいて，タスク一覧の取得
         $tasks = $taskService->getTasks($request->input('status'), $request->input('user_id'));
-        return view('task.index', compact('tasks'));
+        $taskOptions = Task::TYPE;
+        $statusOptions = Task::STATUS;
+        return view('task.index', compact('tasks', 'taskOptions', 'statusOptions', 'projectId'));
     }
 
     /**
@@ -38,7 +41,9 @@ class TaskController extends Controller
     {
         // タスクにかかわるユーザ設定のため，プロジェクト関係User取得
         $projectUsers = Project::findOrFail($projectId)->users;
-        return view('task.create', compact('projectUsers'));
+        $taskOptions = Task::TYPE;
+        $statusOptions = Task::STATUS;
+        return view('task.create', compact('projectUsers', 'taskOptions', 'statusOptions', 'projectId'));
     }
 
     /**
@@ -66,7 +71,9 @@ class TaskController extends Controller
     {
         // Task, Files，Comments取得
         $task = $taskService->getTaskForShow($taskId);
-        return view('task.show', compact('task'));
+        $taskOptions = Task::TYPE;
+        $statusOptions = Task::STATUS;
+        return view('task.show', compact('task', 'taskOptions', 'statusOptions', 'projectId'));
     }
 
     /**
@@ -79,8 +86,10 @@ class TaskController extends Controller
     public function edit(TaskService $taskService, int $projectId, int $taskId): View
     {
         // Task, Files, Comments, ProjectUsers取得
-        $task = $taskService->getTaskForEdit($projectId, $taskId);
-        return view('task.edit', compact('task'));
+        $task = $taskService->getTaskForEdit($taskId);
+        $taskOptions = Task::TYPE;
+        $statusOptions = Task::STATUS;
+        return view('task.edit', compact('task', 'taskOptions', 'statusOptions', 'projectId', 'taskId'));
     }
 
     /**
