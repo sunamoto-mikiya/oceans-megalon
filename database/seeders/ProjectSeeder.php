@@ -22,27 +22,28 @@ class ProjectSeeder extends Seeder
     {
         $projectIds = (Project::factory()->count(5)->create())->pluck('id')->all();
         foreach ($projectIds as $projectId) {
-            $userIds = (User::factory()->count(2)->create())->pluck('id')->all();
+            $users = User::factory()->count(4)->create();
 
-            foreach ($userIds as $userId) {
+            foreach ($users as $user) {
                 ProjectUser::factory()->create([
                     'project_id' => $projectId,
-                    'user_id' => $userId,
+                    'user_id' => $user->id,
                 ]);
 
-                $taskIds = (Task::factory()->count(2)->create([
-                    'user_id' => $userId,
-                    'author_id' => $userId,
-                    'project_id' => $projectId,
-                ]))->pluck('id')->all();
-
-                foreach ($taskIds as $taskId) {
-                    File::factory()->create([
-                        'task_id' => $taskId,
+                for ($i = 1; $i <= 2; $i++) {
+                    $task = Task::factory()->create([
+                        'user_id' => $user->id,
+                        'author_id' => $user->id,
+                        'project_id' => $projectId,
+                        'title' => "{$user->name}の課題",
+                        'type' => array_rand(Task::TYPE),
+                        'status' => array_rand(Task::STATUS),
+                        'description' => "{$user->name}の課題です",
                     ]);
+
                     Comment::factory()->count(2)->create([
-                        'user_id' => $userId,
-                        'task_id' => $taskId,
+                        'user_id' => $user->id,
+                        'task_id' => $task->id,
                     ]);
                 }
             }
