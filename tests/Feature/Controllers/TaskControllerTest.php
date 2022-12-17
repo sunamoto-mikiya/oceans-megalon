@@ -9,6 +9,7 @@ use App\Models\ProjectUser;
 use App\Models\Task;
 use App\Models\User;
 use App\Services\TaskService;
+use Illuminate\Http\Request;
 use Mockery;
 use Tests\TestCase;
 
@@ -48,12 +49,24 @@ class TaskControllerTest extends TestCase
         $response = $this->get(route('task.index', ['projectId' => $this->project->id]));
         $response->assertStatus(302);
         $response->assertRedirect(route('login'));
+
+        // リクエストモック
+        $request = Mockery::mock(Request::class);
+        $request
+            ->shouldReceive('input')
+            ->with('status')
+            ->andReturn(1);
+        $request
+            ->shouldReceive('input')
+            ->with('user_id')
+            ->andReturn(1);
+        $this->instance(Request::class, $request);
         
         // サービスモック
         $this->taskService
             ->shouldReceive('getTasks')
             ->once()
-            ->with(null, null)
+            ->with(1, 1, $this->project->id)
             ->andReturn(Task::all());
         $this->instance(TaskService::class, $this->taskService);
 
