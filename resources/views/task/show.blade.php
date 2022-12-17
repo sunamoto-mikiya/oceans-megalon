@@ -10,6 +10,7 @@
     <p>{{ $statusOptions[$task->status] }}</p>
     <p>{{ $task->start_date }}</p>
     <p>{{ $task->end_date }}</p>
+    <img src="{{ $task->files[0]?->url }}" />
 </div>
 @stop @section('css')
 <link rel="stylesheet" href="/css/admin_custom.css" />
