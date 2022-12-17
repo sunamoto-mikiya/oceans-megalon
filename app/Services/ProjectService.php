@@ -7,6 +7,7 @@ use App\Models\ProjectUser;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Task;
 
 class ProjectService
 {
@@ -17,6 +18,12 @@ class ProjectService
         $this->task = $task ?? new Project();
     }
 
+    /**
+     * ユーザーに紐づくプロジェクト一覧取得
+     *
+     * @param  array $params
+     * @return Collection
+     */
     public function getProjects(): Collection
     {
         $userInfo = Auth::user();
