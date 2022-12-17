@@ -63,11 +63,11 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($projectId): View
+    public function edit(ProjectService $projectService, $projectId): View
     {
+        $project = $projectService->getEditProject($projectId);
         $users = User::query()->get();
-        $project = Project::query()->where('id', $projectId)->get();
-        return view('project.create', compact('project', 'users'));
+        return view('project.edit', compact('project', 'users'));
     }
 
     /**
@@ -77,9 +77,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProjectService $projectService, Request $request, $projectId)
     {
-        //
+        $projectService->updateProject($request, $projectId);
+        return Redirect::route('project.index');
     }
 
     /**
