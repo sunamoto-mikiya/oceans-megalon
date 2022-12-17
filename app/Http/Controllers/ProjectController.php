@@ -16,9 +16,8 @@ class ProjectController extends Controller
      */
     public function index(ProjectService $projectService): View
     {
-        $user = Auth::user();
-        $projects = $projectService->getProjects($user->id);
-        return view('project.index', compact('project'));
+        $projects = $projectService->getProjects();
+        return view('project.index', compact('projects'));
     }
 
     /**

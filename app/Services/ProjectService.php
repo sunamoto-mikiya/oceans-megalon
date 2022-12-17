@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Models\Project;
+use App\Models\ProjectUser;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ProjectService
 {
@@ -14,10 +17,12 @@ class ProjectService
         $this->task = $task ?? new Project();
     }
 
-    public function getProjects($userId): Collection
+    public function getProjects(): Collection
     {
-        $query = Project::query()->where('user_id', $userId);
+        $userInfo = Auth::user();
+        $user = User::findOrFail($userInfo->id);
+        $projects = $user->projects;
 
-        return $query->get();
+        return $projects;
     }
 }
