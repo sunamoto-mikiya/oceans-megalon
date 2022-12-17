@@ -31,8 +31,7 @@ class ProjectController extends Controller
     public function create(): View
     {
         $users = User::query()->get();
-        $author_id = Auth::user()->id;
-        return view('project.create', compact('users', 'author_id'));
+        return view('project.create', compact('users'));
     }
 
     /**
@@ -64,8 +63,11 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ProjectService $projectService, $projectId): View
     {
+        $project = $projectService->getEditProject($projectId);
+        $users = User::query()->get();
+        return view('project.edit', compact('project', 'users'));
     }
 
     /**
@@ -75,9 +77,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProjectService $projectService, Request $request, $projectId)
     {
-        //
+        $projectService->updateProject($request, $projectId);
+        return Redirect::route('project.index');
     }
 
     /**

@@ -6,7 +6,7 @@
             <h3 class="card-title">プロジェクト作成</h3>
         </div>
 
-        <form method="post" action="{{ route('project.store',[$author_id]) }}" enctype="multipart/form-data">
+        <form method="post" action="{{ route('project.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="form-group">

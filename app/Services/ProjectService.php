@@ -42,7 +42,6 @@ class ProjectService
     {
         $project = new Project();
         $project->fill(['title' => $request->title, 'description' => $request->description])->save();
-
         $project->users()->sync($request->users);
     }
 
@@ -56,5 +55,28 @@ class ProjectService
     {
         $project = Project::findOrFail($projectId);
         $project->delete();
+    }
+    /**
+     * 編集するプロジェクトの取得
+     *
+     * @param  array $params
+     */
+    public function getEditProject($projectId)
+    {
+        $project = Project::query()->findOrFail($projectId);
+        return $project;
+    }
+
+    /**
+     * 編集するプロジェクトの更新
+     *
+     * @param  array $params
+     */
+    public function updateProject($request, $projectId)
+    {
+        $project = Project::find($projectId);
+        $project->fill(['title' => $request->title, 'description' => $request->description])->update();
+        $project->users()->detach();
+        $project->users()->sync($request->users);
     }
 }
