@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ProjectController::class, 'index'])->name('index');
         Route::get('/create', [ProjectController::class, 'create'])->name('create');
         Route::post('/', [ProjectController::class, 'store'])->name('store');
-        Route::get('/projectId}/edit', [ProjectController::class, 'edit'])->name('edit');
+        Route::get('/{projectId}/edit', [ProjectController::class, 'edit'])->name('edit');
         Route::post('/{projectId}', [ProjectController::class, 'update'])->name('update');
         Route::delete('/{projectId}', [ProjectController::class, 'delete'])->name('delete');
     });
