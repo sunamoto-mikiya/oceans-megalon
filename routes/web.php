@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
 
     // Task
     Route::prefix('projects/{projectId}')->name('task.')->group(function () {
-        Route::get('/', [TaskController::class, 'index'])->name('index');
+        Route::get('/index', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
         Route::post('/', [TaskController::class, 'store'])->name('store');
         Route::get('/tasks/{taskId}', [TaskController::class, 'show'])->name('show');
