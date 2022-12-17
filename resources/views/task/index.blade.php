@@ -22,7 +22,12 @@
                     <!-- <a href="{{ route('task.show', [$projectId, $task->id]) }}"> -->
                     <th>{{ $taskOptions[$task->type] }}</th>
                     <!-- <a href="{{ route('task.show', [$projectId, $task->id]) }}">{{ $task->title }}</a> -->
-                    <th><a href="{{ route('task.show', [$projectId, $task->id]) }}">{{ $task->title }}</a></th>
+                    <th>
+                        <a
+                            href="{{ route('task.show', [$projectId, $task->id]) }}"
+                            >{{ $task->title }}</a
+                        >
+                    </th>
                     <th>{{ $task->user->name }}</th>
                     <th>{{ $statusOptions[$task->status] }}</th>
                     <!-- <th>{{ $task->description }}</th> -->

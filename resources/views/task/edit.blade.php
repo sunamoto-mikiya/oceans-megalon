@@ -81,7 +81,7 @@
                 <label>開始日</label>
                 <br />
                 <input
-                    type="date-local"
+                    type="date"
                     name="start_date"
                     id="start_date"
                     value="{{ old('start_date', $task->start_date) }}"
@@ -93,7 +93,7 @@
                 <label>期限日</label>
                 <br />
                 <input
-                    type="date-local"
+                    type="date"
                     name="end_date"
                     id="end_date"
                     value="{{ old('end_date',$task->end_date) }}"
