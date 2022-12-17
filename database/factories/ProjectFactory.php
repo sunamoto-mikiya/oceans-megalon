@@ -17,8 +17,8 @@ class ProjectFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->title(),
-            'description' => $this->faker->realText(300),
+            'title' => 'プロジェクト名',
+            'description' => 'プロジェクトの説明',
         ];
     }
 }
