@@ -34,6 +34,20 @@ class ProjectService
     }
 
     /**
+     * projectの作成
+     *
+     * @param  array $params
+     */
+    public function storeProject($request)
+    {
+        $project = new Project();
+        $project->fill(['title' => $request->title, 'description' => $request->description])->save();
+
+        $project->users()->sync($request->users);
+    }
+
+
+    /**
      * projectの削除
      *
      * @param  array $params
