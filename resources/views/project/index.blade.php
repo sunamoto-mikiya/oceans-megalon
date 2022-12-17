@@ -5,7 +5,7 @@
         <h3 class="card-title">プロジェクト一覧</h3>
         <div class="card-tools">
             <a
-                href="javascript:void(0)"
+                href="{{ route('project.create') }}"
                 class="btn btn-sm btn-secondary float-right"
                 >新規プロジェクト作成</a
             >
