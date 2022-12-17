@@ -25,7 +25,7 @@ class TaskController extends Controller
     public function index(Request $request, TaskService $taskService, int $projectId): View
     {
         // クエリに基づいて，タスク一覧の取得
-        $tasks = $taskService->getTasks($request->input('status'), $request->input('user_id'));
+        $tasks = $taskService->getTasks($request->input('status'), $request->input('user_id'), $projectId);
         $taskOptions = Task::TYPE;
         $statusOptions = Task::STATUS;
         return view('task.index', compact('tasks', 'taskOptions', 'statusOptions', 'projectId'));
