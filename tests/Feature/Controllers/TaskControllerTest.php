@@ -54,7 +54,7 @@ class TaskControllerTest extends TestCase
             ->shouldReceive('getTasks')
             ->once()
             ->with(null, null)
-            ->andReturn(User::all());
+            ->andReturn(Task::all());
         $this->instance(TaskService::class, $this->taskService);
 
         $response = $this->actingAs($this->user)
@@ -149,7 +149,7 @@ class TaskControllerTest extends TestCase
         $this->taskService
             ->shouldReceive('getTaskForEdit')
             ->once()
-            ->with($this->project->id, $this->task->id)
+            ->with($this->task->id)
             ->andReturn($this->task);
         $this->instance(TaskService::class, $this->taskService);
         
