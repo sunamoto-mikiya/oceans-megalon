@@ -4,22 +4,11 @@
     <div class="card-header border-transparent">
         <h3 class="card-title">プロジェクト一覧</h3>
         <div class="card-tools">
-            <button
-                type="button"
-                class="btn btn-tool"
-                data-card-widget="collapse"
-                control-id="ControlID-15"
+            <a
+                href="javascript:void(0)"
+                class="btn btn-sm btn-secondary float-right"
+                >新規プロジェクト作成</a
             >
-                <i class="fas fa-minus"></i>
-            </button>
-            <button
-                type="button"
-                class="btn btn-tool"
-                data-card-widget="remove"
-                control-id="ControlID-16"
-            >
-                <i class="fas fa-times"></i>
-            </button>
         </div>
     </div>
 
@@ -37,7 +26,7 @@
                     <tr>
                         <td>
                             <a
-                                href="{{ route('project.show', ['projectId' => $project->id]) }}"
+                                href="{{ route('task.index', ['projectId' => $project->id]) }}"
                                 >{{ $project->title }}</a
                             >
                         </td>
@@ -47,28 +36,43 @@
                                 data-color="#00a65a"
                                 data-height="20"
                             >
-                                <a
-                                    href="{{ route('project.show', ['projectId' => $project->id]) }}"
-                                    >{ {{ $project->description }}</a
-                                >
+                                {{ $project->description }}
                             </div>
+                        </td>
+                        <td>
+                            <form
+                                class="col s12"
+                                method="POST"
+                                action="{{ route('project.delete',['projectId' => $project->id]) }}"
+                            >
+                                @csrf @method('DELETE')
+                                <button
+                                    type="submit"
+                                    class="btn btn-block btn-danger btn-xs"
+                                    control-id="ControlID-36"
+                                >
+                                    削除
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <a
+                                href="{{ route('project.edit',['projectId'=>$project->id]) }}"
+                            >
+                                <button
+                                    type="button"
+                                    class="btn btn-block btn-primary btn-xs"
+                                    control-id="ControlID-12"
+                                >
+                                    編集
+                                </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
                 @endforeach
             </table>
         </div>
-    </div>
-
-    <div class="card-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-info float-left"
-            >Place New Order</a
-        >
-        <a
-            href="javascript:void(0)"
-            class="btn btn-sm btn-secondary float-right"
-            >View All Orders</a
-        >
     </div>
 </div>
 @stop @section('css')

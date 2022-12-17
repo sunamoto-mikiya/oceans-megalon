@@ -32,4 +32,15 @@ class ProjectService
 
         return $projects;
     }
+
+    /**
+     * projectの削除
+     *
+     * @param  array $params
+     */
+    public function deleteProject($projectId)
+    {
+        $project = Project::findOrFail($projectId);
+        $project->delete();
+    }
 }

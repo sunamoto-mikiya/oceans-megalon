@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\ProjectService;
 use Illuminate\View\View;
+use App\Models\Project;
+use Illuminate\Support\Facades\Redirect;
 
 class ProjectController extends Controller
 {
@@ -60,7 +62,6 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -81,8 +82,9 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(ProjectService $projectService, $projectId)
     {
-        //
+        $projectService->deleteProject($projectId);
+        return Redirect::route('project.index');
     }
 }
