@@ -20,32 +20,60 @@ class ProjectSeeder extends Seeder
      */
     public function run()
     {
+        $oceans = User::factory()->create([
+            'name' => 'オーシャンズ',
+            'email' => 'oceans@example.com',
+        ]);
         $projectIds = (Project::factory()->count(5)->create())->pluck('id')->all();
         foreach ($projectIds as $projectId) {
-            $users = User::factory()->count(4)->create();
+            ProjectUser::factory()->create([
+                'project_id' => $projectId,
+                'user_id' => $oceans->id,
+            ]);
 
+            $users = User::factory()->count(4)->create();
             foreach ($users as $user) {
                 ProjectUser::factory()->create([
                     'project_id' => $projectId,
                     'user_id' => $user->id,
                 ]);
 
-                for ($i = 1; $i <= 2; $i++) {
-                    $task = Task::factory()->create([
-                        'user_id' => $user->id,
-                        'author_id' => $user->id,
-                        'project_id' => $projectId,
-                        'title' => "{$user->name}の課題",
-                        'type' => array_rand(Task::TYPE),
-                        'status' => array_rand(Task::STATUS),
-                        'description' => "{$user->name}の課題です",
-                    ]);
+                $task1 = Task::factory()->create([
+                    'user_id' => $oceans->id,
+                    'author_id' => $user->id,
+                    'project_id' => $projectId,
+                    'title' => "{$oceans->name}の課題",
+                    'type' => array_rand(Task::TYPE),
+                    'status' => array_rand(Task::STATUS),
+                    'description' => "{$oceans->name}の課題です",
+                ]);
+                $task2 = Task::factory()->create([
+                    'user_id' => $user->id,
+                    'author_id' => $oceans->id,
+                    'project_id' => $projectId,
+                    'title' => "{$user->name}の課題",
+                    'type' => array_rand(Task::TYPE),
+                    'status' => array_rand(Task::STATUS),
+                    'description' => "{$user->name}の課題です",
+                ]);
 
-                    Comment::factory()->count(2)->create([
-                        'user_id' => $user->id,
-                        'task_id' => $task->id,
-                    ]);
-                }
+                Comment::factory()->create([
+                    'user_id' => $oceans->id,
+                    'task_id' => $task1->id,
+                ]);
+                Comment::factory()->create([
+                    'user_id' => $user->id,
+                    'task_id' => $task1->id,
+                ]);
+
+                Comment::factory()->create([
+                    'user_id' => $user->id,
+                    'task_id' => $task2->id,
+                ]);
+                Comment::factory()->create([
+                    'user_id' => $oceans->id,
+                    'task_id' => $task2->id,
+                ]);
             }
         }
     }
