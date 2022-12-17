@@ -6,16 +6,16 @@
             <h3 class="card-title">プロジェクト作成</h3>
         </div>
 
-        <form method="post" action="{{ route('project.store',[$author_id]) }}" enctype="multipart/form-data">
+        <form method="post" action="{{ route('project.update',['projectId'=>$project->id]) }}" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="form-group">
                     <label for="exampleInputEmail1">タイトル</label>
                     <input
                         name="title"
+                        value="{{ old('title',$project->title)}}"
                         class="form-control"
                         id="title"
-                        placeholder="タイトル"
                         control-id="ControlID-1"
                     />
                 </div>
@@ -26,10 +26,9 @@
                         name="description"
                         id="description"
                         rows="3"
-                        placeholder="プロジェクト詳細"
                         control-id="ControlID-13"
                         data-dl-input-translation="true"
-                    ></textarea>
+                    > {{ $project->description }}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputFile">ファイル選択</label>
@@ -73,7 +72,7 @@
                     class="btn btn-primary"
                     control-id="ControlID-5"
                 >
-                    作成
+                    更新
                 </button>
             </div>
         </form>
