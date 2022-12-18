@@ -107,9 +107,6 @@ class TaskService
      */
     public function updateTask(int $projectId, int $taskId, array $params, int $authorId): Task
     {
-        $file = $params['file'];
-        unset($params['file']);
-
         // タスク更新
         $params['author_id'] = $authorId;
         $task = Task::findOrFail($taskId);
@@ -117,7 +114,11 @@ class TaskService
         $task->saveOrFail();
 
         // 画像ファイルS3アップロード
-        $this->task->putFileS3($projectId, $task->id, $file);
+        if (isset($params['file'])) {
+            $file = $params['file'];
+            unset($params['file']);
+            $this->task->putFileS3($projectId, $task->id, $file);
+        }
 
         return $task;
     }
