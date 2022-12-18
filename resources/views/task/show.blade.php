@@ -49,6 +49,13 @@
         <hr />
         <strong><i class="fas fa-calendar-day mr-1"></i> 開始日〜終了日</strong>
         <p>{{ $task->start_date }}〜{{ $task->end_date }}</p>
+        <hr />
+        @if ($task->files->isNotEmpty())
+        <strong><i class="fas fa-calendar-day mr-1"></i> 添付画像</strong>
+        <p class="text-center mt-5">
+            <img src="{{ $task->files[0]->url }}" class="img-fluid" max-width="100px" alt="添付画像">
+        </p>
+        @endif
     </div>
 </div>
 @stop @section('css')

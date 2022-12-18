@@ -120,6 +120,14 @@
                         <span class="input-group-text">Upload</span>
                     </div>
                 </div>
+                @if ($task->files->isNotEmpty())
+                <div class="mt-3">
+                    <strong> 現在の画像</strong>
+                    <p class="text-center mt-5">
+                        <img src="{{ $task->files[0]->url }}" class="img-fluid" max-width="100px" alt="添付画像">
+                    </p>
+                </div>
+                @endif
             </div>
         </div>
         <div class="card-footer">
