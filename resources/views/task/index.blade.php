@@ -1,8 +1,15 @@
 @extends('adminlte::page') @section('title', '課題一覧')
 @section('content_header')
+<h3 class="title">課題一覧</h3>
 <div class="card">
     <div class="card-header border-transparent">
-        <h3 class="card-title">課題一覧</h3>
+        <div class="card-tools">
+            <a
+                href="{{ route('task.create', ['projectId' => $projectId]) }}"
+                class="btn btn-sm btn-secondary float-right"
+                >新規課題作成</a
+            >
+        </div>
     </div>
     <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
