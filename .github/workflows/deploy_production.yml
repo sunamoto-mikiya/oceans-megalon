@@ -83,14 +83,14 @@ jobs:
             --watch-container=$CONTAINER_NAME \
             --overrides='{"containerOverrides":[{"name":"'$CONTAINER_NAME'", "command":["php", "artisan", "migrate", "--force"]}]}'
 
-      - name: DB Seed
-        env:
-          IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-        run: |
-          ecspresso run --config $ECSPRESSO_CONFIG \
-            --latest-task-definition \
-            --watch-container=$CONTAINER_NAME \
-            --overrides='{"containerOverrides":[{"name":"'$CONTAINER_NAME'", "command":["php", "artisan", "db:seed", "--force"]}]}'
+      # - name: DB Seed
+      #   env:
+      #     IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+      #   run: |
+      #     ecspresso run --config $ECSPRESSO_CONFIG \
+      #       --latest-task-definition \
+      #       --watch-container=$CONTAINER_NAME \
+      #       --overrides='{"containerOverrides":[{"name":"'$CONTAINER_NAME'", "command":["php", "artisan", "db:seed", "--force"]}]}'
 
       - name: Deploy to ECS
         env:
