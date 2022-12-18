@@ -108,7 +108,7 @@ class Task extends Model
         }
 
         // S3にファイル保存
-        $path = Storage::disk('s3')->putFile("/images/projects/{$projectId}/tasks/{$taskId}", $file, 'public');
+        $path = Storage::disk('s3')->putFile("/images/projects/{$projectId}/tasks/{$taskId}", $file);
         // 既に保存済みならば更新
         $file = File::where('task_id', $taskId)->first();
         $url = Storage::disk('s3')->url($path);
