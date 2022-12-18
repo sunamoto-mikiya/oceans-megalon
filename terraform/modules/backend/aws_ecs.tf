@@ -40,6 +40,14 @@ resource "aws_ecs_task_definition" "oceans_ecs_task" {
       {
         "name": "MAIL_PASSWORD",
         "valueFrom": "arn:aws:ssm:ap-northeast-1:418455050024:parameter/oceans/mail/password"
+      },
+      {
+        "name": "AWS_ACCESS_KEY_ID",
+        "valueFrom": "arn:aws:ssm:ap-northeast-1:418455050024:parameter/oceans/aws/accesskey"
+      },
+      {
+        "name": "AWS_SECRET_ACCESS_KEY",
+        "valueFrom": "arn:aws:ssm:ap-northeast-1:418455050024:parameter/oceans/aws/secretkey"
       }
     ],
     "portMappings": [
