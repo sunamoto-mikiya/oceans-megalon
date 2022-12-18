@@ -33,7 +33,6 @@
                     name="title"
                     id="title"
                     value="{{ old('title', $task->title) }}"
-                    placeholder="Enter email"
                     control-id="ControlID-1"
                 />
             </div>
