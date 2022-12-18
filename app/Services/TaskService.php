@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class TaskService
 {
@@ -114,6 +115,7 @@ class TaskService
         $task->fill($params);
         $task->saveOrFail();
 
+        Log::info(implode($params));
         // 画像ファイルS3アップロード
         if (isset($params['file'])) {
             $file = $params['file'];

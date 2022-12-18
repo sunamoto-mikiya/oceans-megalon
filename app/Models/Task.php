@@ -103,7 +103,7 @@ class Task extends Model
     public function putFileS3(int $projectId, int $taskId, UploadedFile|null $file): string
     {
         if (is_null($file)) {
-            File::where('task_id', $taskId)->first()?->delete();
+            // File::where('task_id', $taskId)->first()?->delete();
             return '';
         }
 
