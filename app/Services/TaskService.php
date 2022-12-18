@@ -46,16 +46,17 @@ class TaskService
      */
     public function storeTask(int $projectId, array $params, int $authorId): Task
     {
-        $file = $params['file'];
-        unset($params['file']);
-
         // タスク作成
         $params['project_id'] = $projectId;
         $params['author_id'] = $authorId;
         $task = Task::create($params);
 
-        // 画像ファイルS3アップロード
-        $this->task->putFileS3($projectId, $task->id, $file);
+        if (isset($params['file'])) {
+            $file = $params['file'];
+            unset($params['file']);
+            // 画像ファイルS3アップロード
+            $this->task->putFileS3($projectId, $task->id, $file);
+        }
 
         return $task;
     }

@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('projects/{projectId}')->name('task.')->group(function () {
         Route::get('/index', [TaskController::class, 'index'])->name('index');
         Route::get('/create', [TaskController::class, 'create'])->name('create');
-        Route::post('/create', [TaskController::class, 'store'])->name('store');
+        Route::post('/tasks', [TaskController::class, 'store'])->name('store');
         Route::get('/tasks/{taskId}', [TaskController::class, 'show'])->name('show');
         Route::get('/tasks/{taskId}/edit', [TaskController::class, 'edit'])->name('edit');
         Route::post('/tasks/{taskId}', [TaskController::class, 'update'])->name('update');
